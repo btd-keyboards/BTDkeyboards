@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BTD keyboards</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; }
+  header { background: #007bff; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+  h1 { margin: 0; font-size: 24px; }
+  #cartIcon { cursor: pointer; font-size: 24px; }
+  .section { margin: 20px; text-align: center; }
+  .choices img { width: 100px; margin: 5px; cursor: pointer; border: 2px solid transparent; }
+  .choices img.selected { border-color: #007bff; }
+  .display img { width: 300px; margin: 10px; }
+  button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+  #cartPage { display: none; padding: 20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>BTD keyboards</h1>
+  <div id="cartIcon" onclick="showCart()">🛒</div>
+</header>
+
+<!-- Main selection page -->
+<div id="mainPage">
+  <div class="section">
+    <h2>Choose your Base</h2>
+    <div class="choices" id="bases">
+      <img src="/BTD_keyboards/images/red.jpg" alt="Base 1" onclick="selectItem('base', this)">
+      <img src="/BTD_keyboards/images/blue.jpg" alt="Base 2" onclick="selectItem('base', this)">
+      <img src="/BTD_keyboards/images/green.jpg" alt="Base 3" onclick="selectItem('base', this)">
+      <img src="/BTD_keyboards/images/purple.jpg" alt="Base 4" onclick="selectItem('base', this)">
+      <img src="/BTD_keyboards/images/black.jpg" alt="Base 5" onclick="selectItem('base', this)">
+      <img src="/BTD_keyboards/images/white.jpg" alt="Base 6" onclick="selectItem('base', this)">
+      <img src="/BTD_keyboards/images/tech.AVIF" alt="Base 7" onclick="selectItem('base', this)">
+    </div>
+    <div class="display" id="displayBase"></div>
+  </div>
+
+  <div class="section">
+    <h2>Choose your Switch</h2>
+    <div class="choices" id="switches">
+      <img src="/BTD_keyboards/images/SILENT.jpg" alt="Switch 1" onclick="selectItem('switch', this)">
+      <img src="/BTD_keyboards/images/CLICKY.jpg" alt="Switch 2" onclick="selectItem('switch', this)">
+      <img src="/BTD_keyboards/images/TACTILE.jpg" alt="Switch 3" onclick="selectItem('switch', this)">
+    </div>
+    <div class="display" id="displaySwitch"></div>
+  </div>
+
+  <div class="section">
+    <h2>Choose your Keycaps</h2>
+    <div class="choices" id="keycaps">
+      <img src="/BTD_keyboards/images/KEY RED.AVIF" alt="Keycap 1" onclick="selectItem('keycap', this)">
+      <img src="/BTD_keyboards/images/KEY BEIGE.AVIF" alt="Keycap 2" onclick="selectItem('keycap', this)">
+      <img src="/BTD_keyboards/images/KEY BLACK.AVIF" alt="Keycap 3" onclick="selectItem('keycap', this)">
+      <img src="/BTD_keyboards/images/KEY BLUE.AVIF" alt="Keycap 4" onclick="selectItem('keycap', this)">
+      <img src="/BTD_keyboards/images/KEY PURPLE.AVIF" alt="Keycap 5" onclick="selectItem('keycap', this)">
+      <img src="/BTD_keyboards/images/KEY WHITE PINK.AVIF" alt="Keycap 6" onclick="selectItem('keycap', this)">
+      <img src="/BTD_keyboards/images/keycaps greeen.AVIF" alt="Keycap 7" onclick="selectItem('keycap', this)">
+    </div>
+    <div class="display" id="displayKeycap"></div>
+  </div>
+
+  <div class="section">
+    <label><input type="checkbox" id="sticker"> Add Hebrew Sticker</label>
+  </div>
+
+  <div class="section">
+    <button id="addCartBtn" onclick="addToCart()" disabled>Add to Cart</button>
+  </div>
+</div>
+
+<!-- Cart page -->
+<div id="cartPage">
+  <h2>Your Cart</h2>
+  <div id="cartItems">Cart is empty</div>
+  <button onclick="backToSelection()">Back</button>
+</div>
+
+<script>
+let selections = { base: null, switch: null, keycap: null, sticker: false };
+
+function selectItem(type, img) {
+  document.querySelectorAll('#' + type + 's img').forEach(i => i.classList.remove('selected'));
+  img.classList.add('selected');
+  selections[type] = img.src;
+  document.getElementById('display' + type.charAt(0).toUpperCase() + type.slice(1)).innerHTML =
+    '<img src="'+img.src+'">';
+  document.getElementById('addCartBtn').disabled = !(selections.base && selections.switch && selections.keycap);
+}
+
+function addToCart() {
+  selections.sticker = document.getElementById('sticker').checked;
+  showCart();
+  displayCart();
+}
+
+function showCart() {
+  document.getElementById('mainPage').style.display = 'none';
+  document.getElementById('cartPage').style.display = 'block';
+  displayCart();
+}
+
+function backToSelection() {
+  document.getElementById('mainPage').style.display = 'block';
+  document.getElementById('cartPage').style.display = 'none';
+}
+
+function displayCart() {
+  let items = [];
+  if(selections.base) items.push('Base selected');
+  if(selections.switch) items.push('Switch selected');
+  if(selections.keycap) items.push('Keycaps selected');
+  if(selections.sticker) items.push('Hebrew sticker added');
+  if(items.length === 0) items.push('Cart is empty');
+  document.getElementById('cartItems').innerHTML = items.join('<br>');
+}
+</script>
+
+</body>
+</html>
